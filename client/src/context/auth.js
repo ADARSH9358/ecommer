@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
-
+const baseUrl = process.env.REACT_APP_BASE_URL;
 const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
@@ -9,7 +9,14 @@ const AuthProvider = ({ children }) => {
   });
 
   //default axios
-  axios.defaults.headers.common["Authorization"] = auth?.token;
+  // axios.defaults.headers.common["Authorization"] = auth?.token;
+  const axiosInstance = axios.create({
+    baseURL: baseUrl, // Replace with your actual API base URL
+  });
+
+  // Set the authorization header for the Axios instance
+  axiosInstance.defaults.headers.common["Authorization"] = auth?.token;
+
 
   useEffect(() => {
     const data = localStorage.getItem("auth");
